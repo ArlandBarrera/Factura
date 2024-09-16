@@ -24,13 +24,27 @@ def calcular_impuesto(precio, impuesto):
     return valor_impuesto
 
 
+def filtrar_string_int(string, indicacion):
+    while not convertir_string_int_try(string) or string == "0":
+        if string == "0":
+            print(f"{indicacion} no puede ser cero.")
+        return False
+    return True
+
+
+def filtrar_string_float(string, indicacion):
+    while not convertir_string_float_try(string) or string == "0":
+        if string == "0":
+            print(f"{indicacion} no puede ser cero.")
+        return False
+    return True
+
+
 def factura(precios, impuesto, cantidad, itbms, caracteres):
     monto_total = 0
     print("-" * caracteres)
     print("\t\tFACTURA")
     print("-" * caracteres)
-    # V 1.3
-    # Mostrar fecha local
     print(f"Fecha: {time.asctime(time.localtime(time.time()))}")
     print("-" * caracteres)
     print(f"Impuesto sobre producto: {itbms}%")
@@ -40,20 +54,6 @@ def factura(precios, impuesto, cantidad, itbms, caracteres):
     for i, precio in enumerate(precios):
         total_producto = precio + impuesto[i]
         monto_total += total_producto
-        # V 1.1
-        # Formateo de valores para mostrar siempre decimales fijos
-        # dos decimales para el precio y total del producto, y monto total
-        # cuatro decimales para el impuesto
-        # V 1.2
-        # EL impuesto tiene dos decimales
-        # el impuesto es una cantidad monetaria -> dolares y centavos
-        # TODO
-        # el impuesto sobre uno o muchos productos se puede factorizar
-        # sum(precio_todos_los_productos) * tasa_de_impuesto
-        # A*r + B*r + C*r = (A+B+C)*r
-        # dos opciones:
-        # mostrar impuesto por producto (actual)
-        # mostar impuesto total (futura opcion)
         impuesto[i] = f"{round(impuesto[i], 2):.2f}"
         total_producto = f"{round(total_producto, 2):.2f}"
         print(
@@ -79,7 +79,7 @@ def main():
     # Impuesto a las Transferencias de Bienes Corporales Muebles
     # y la Prestacion de Servicios
     iva = input("Tasa de impuesto (%): ")
-    while not convertir_string_float_try(iva):
+    while not filtrar_string_float(iva, "La tasa de impuesto"):
         iva = input("Tasa de impuesto (%): ")
     itbms = float(iva) / 100
     print("-" * cantidad_caracteres)
@@ -87,17 +87,13 @@ def main():
         print()
         print("*" * cantidad_caracteres)
         precio = input("Precio de producto: ")
-        while not convertir_string_float_try(precio):
+        while not filtrar_string_float(precio, "El precio del producto"):
             precio = input("Precio de Producto: ")
         precio = float(precio)
         cantidad = input("Cantidad: ")
-        while not convertir_string_int_try(cantidad) or cantidad == "0":
-            if cantidad == "0":
-                print("La cantidad no puede ser cero.")
+        while not filtrar_string_int(cantidad, "La cantidad"):
             cantidad = input("Cantidad: ")
         cantidad = int(cantidad)
-        while cantidad == 0:
-            print("La cantidad no puede ser cero.")
         cantidades_productos.append(cantidad)
         precio *= cantidad
         precios_productos.append(precio)
