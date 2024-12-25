@@ -57,7 +57,7 @@ def factura(precios, impuesto, cantidad, itbms, caracteres):
         impuesto[i] = f"{round(impuesto[i], 2):.2f}"
         total_producto = f"{round(total_producto, 2):.2f}"
         print(
-            f"{(precio/cantidad[i]):.2f}x{cantidad[i]}\t-\t{impuesto[i]}\t-\t{total_producto}"
+            f"{(precio / cantidad[i]):.2f}x{cantidad[i]}\t-\t{impuesto[i]}\t-\t{total_producto}"
         )
         print("-" * caracteres)
     monto_total = f"{round(monto_total, 2):.2f}"
