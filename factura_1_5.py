@@ -1,7 +1,7 @@
 # V 1.5
 import time
 
-colors = {
+colors: dict[str, str] = {
     "r": "\033[31m",
     "v": "\033[32m",
     "m": "\033[33m",
@@ -11,7 +11,7 @@ colors = {
 }
 
 
-def cnv_str_float_try(string):
+def cnv_str_float_try(string: str):
     try:
         float(string)
         return True
@@ -19,7 +19,7 @@ def cnv_str_float_try(string):
         print(f"{colors['r']}Computo no valido. Solo valores numericos.{colors['n']}")
 
 
-def cnv_str_int_try(string):
+def cnv_str_int_try(string: str):
     try:
         int(string)
         return True
@@ -27,7 +27,7 @@ def cnv_str_int_try(string):
         print(f"{colors['r']}Computo no valido. Solo numeros enteros.{colors['n']}")
 
 
-def num_myr_cero(num, indicacion):
+def num_myr_cero(num: float, indicacion: str):
     if num <= 0:
         print(
             f"{colors['r']}El valor `{indicacion}` no puede ser cero o negativo.{colors['n']}"
@@ -36,7 +36,7 @@ def num_myr_cero(num, indicacion):
     return True
 
 
-def num_neg(num, indicacion):
+def num_neg(num: float, indicacion: str) -> bool:
     if num < 0:
         print(
             f"{colors['r']}El valor `{indicacion}` no puede ser negativo.{colors['n']}"
@@ -45,7 +45,7 @@ def num_neg(num, indicacion):
     return True
 
 
-def num_myr_cien(num, indicacion):
+def num_myr_cien(num: float, indicacion: str) -> bool:
     if num > 100:
         print(
             f"{colors['r']}El valor `{indicacion}` no puede ser mayor a cien.{colors['n']}"
@@ -54,7 +54,7 @@ def num_myr_cien(num, indicacion):
     return True
 
 
-def cnv_str_int_cero(string, indicacion):
+def cnv_str_int_cero(string: str, indicacion: str) -> bool:
     if cnv_str_int_try(string):
         num = int(string)
         if num_myr_cero(num, indicacion):
@@ -62,7 +62,7 @@ def cnv_str_int_cero(string, indicacion):
     return False
 
 
-def cnv_str_float_cero(string, indicacion):
+def cnv_str_float_cero(string: str, indicacion: str) -> bool:
     if cnv_str_float_try(string):
         num = float(string)
         if num_myr_cero(num, indicacion):
@@ -70,7 +70,7 @@ def cnv_str_float_cero(string, indicacion):
     return False
 
 
-def cnv_str_float_neg(string, indicacion):
+def cnv_str_float_neg(string: str, indicacion: str) -> bool:
     if cnv_str_float_try(string):
         num = float(string)
         if num_neg(num, indicacion):
@@ -78,7 +78,7 @@ def cnv_str_float_neg(string, indicacion):
     return False
 
 
-def cnv_str_descuento(string, indicacion):
+def cnv_str_descuento(string: str, indicacion: str) -> bool:
     if cnv_str_float_try(string):
         num = float(string)
         if num_neg(num, indicacion) and num_myr_cien(num, indicacion):
@@ -86,28 +86,35 @@ def cnv_str_descuento(string, indicacion):
     return False
 
 
-def clc_cnt(precio, cantidad):
+def clc_cnt(precio: float, cantidad: int) -> float:
     precio_cantidad = precio * cantidad
     return precio_cantidad
 
 
-def clc_imp(precio, cantidad, impuesto):
+def clc_imp(precio: float, cantidad: int, impuesto: float) -> float:
     valor_impuesto = clc_cnt(precio, cantidad) * impuesto
     return valor_impuesto
 
 
-def calcular_descuento(precio, porcentaje_descuento):
-    porcentaje_descuento = float(porcentaje_descuento)
-    descuento = porcentaje_descuento / 100
+def calcular_descuento(precio: float, porcentaje_descuento: str) -> float:
+    tasa_descuento = float(porcentaje_descuento)
+    descuento = tasa_descuento / 100
     precio_descontado = precio * (1 - descuento)
     return precio_descontado
 
 
-def mostrar_resultados(precio, cantidad, impuesto, total):
+def mostrar_resultados(precio: float, cantidad: int, impuesto: float, total: float):
     print(f"{(precio):.2f}x{cantidad}\t-\t{(impuesto):.2f}\t-\t{(total):.2f}")
 
 
-def factura(precios, cantidad, iva, itbms, descuentos, caracteres):
+def factura(
+    precios: list[float],
+    cantidad: list[int],
+    iva: str,
+    itbms: float,
+    descuentos: dict[int, tuple[str, float]],
+    caracteres: int,
+):
     monto_total = 0
     impuesto_precontado = 0
     total_precontado = 0
@@ -154,9 +161,9 @@ def factura(precios, cantidad, iva, itbms, descuentos, caracteres):
 
 
 def main():
-    precios_productos = []
-    cantidades_productos = []
-    descuentos = {}
+    precios_productos: list[float] = []
+    cantidades_productos: list[int] = []
+    descuentos: dict[int, tuple[str, float]] = {}
     opcion = ""
     cantidad_caracteres = 45
     print("-" * cantidad_caracteres)
